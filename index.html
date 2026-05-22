@@ -7,9 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Amiri:wght@400;700&display=swap');
         body {
             font-family: 'Cairo', sans-serif;
+        }
+        .arabic-text {
+            font-family: 'Amiri', serif;
         }
     </style>
 </head>
@@ -76,40 +79,99 @@
         </div>
     </nav>
 
-    <main class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 data-i18n="hero.title">تعلم اللغة العربية</h1>
-                <p data-i18n="hero.subtitle">منصة تعليمية متعددة اللغات لتعلم اللغة العربية لغير الناطقين بها</p>
-                <p data-i18n="hero.welcome">مرحباً بك في منصة تعلم اللغة العربية</p>
-                <p data-i18n="hero.description">نقدم لك أفضل الطرق لتعلم اللغة العربية بطريقة سهلة وممتعة</p>
-                <button class="cta-button" data-i18n="hero.getStarted">ابدأ التعلم</button>
+    <main class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h1 data-i18n="hero.title" class="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl mb-4">تعلم اللغة العربية</h1>
+                <p data-i18n="hero.subtitle" class="text-xl text-gray-500 max-w-3xl mx-auto">منصة تعليمية متعددة اللغات لتعلم اللغة العربية لغير الناطقين بها</p>
             </div>
 
-            <div class="features">
-                <div class="feature-card">
-                    <h3 data-i18n="features.interactive">دروس تفاعلية</h3>
-                    <p data-i18n="features.interactiveDesc">دروس تفاعلية مع تمارين</p>
+            <!-- Lesson Viewer Section -->
+            <section class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden mb-20 border border-gray-100">
+                <div class="p-6 sm:p-10">
+                    <!-- Lesson Header -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 pb-8 border-b border-gray-100">
+                        <div>
+                            <h2 data-i18n="lesson.title" class="text-3xl font-bold text-gray-900 mb-2">الدرس الأول: التحية والتعارف</h2>
+                            <p data-i18n="lesson.subtitle" class="text-gray-500">محادثة بسيطة بين شخصين</p>
+                        </div>
+                        
+                        <!-- Audio Player Button -->
+                        <div class="mt-6 sm:mt-0">
+                            <button class="group flex items-center gap-4 bg-blue-50 hover:bg-blue-100 text-blue-600 px-6 py-4 rounded-2xl transition-all duration-300">
+                                <div class="w-12 h-12 flex items-center justify-center bg-blue-600 group-hover:bg-blue-700 text-white rounded-full shadow-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                                <div class="text-right">
+                                    <span data-i18n="lesson.playAudio" class="block font-bold">استمع للدرس</span>
+                                    <span class="text-xs text-blue-400">02:45</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lesson Content -->
+                    <div class="space-y-12">
+                        <!-- Paragraph 1 -->
+                        <div class="lesson-item border-b border-gray-50 pb-8 last:border-0">
+                            <p class="arabic-text text-4xl sm:text-5xl text-gray-800 mb-6 leading-[2] sm:leading-[2.5] text-right" dir="rtl">
+                                السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ.
+                            </p>
+                            <p data-i18n="lesson.p1" class="text-lg sm:text-xl text-gray-400 font-medium italic">
+                                Peace be upon you, and the mercy of Allah and His blessings.
+                            </p>
+                        </div>
+
+                        <!-- Paragraph 2 -->
+                        <div class="lesson-item border-b border-gray-50 pb-8 last:border-0">
+                            <p class="arabic-text text-4xl sm:text-5xl text-gray-800 mb-6 leading-[2] sm:leading-[2.5] text-right" dir="rtl">
+                                اسْمِي مُحَمَّدٌ، أَنَا مِنَ مِصْرَ. مَا اسْمُكَ؟
+                            </p>
+                            <p data-i18n="lesson.p2" class="text-lg sm:text-xl text-gray-400 font-medium italic">
+                                My name is Muhammad, I am from Egypt. What is your name?
+                            </p>
+                        </div>
+
+                        <!-- Paragraph 3 -->
+                        <div class="lesson-item border-b border-gray-50 pb-8 last:border-0">
+                            <p class="arabic-text text-4xl sm:text-5xl text-gray-800 mb-6 leading-[2] sm:leading-[2.5] text-right" dir="rtl">
+                                أَهْلًا بِكَ يَا مُحَمَّدُ. أَنَا خَالِدٌ، أَنَا مِنَ السُّعُودِيَّةِ.
+                            </p>
+                            <p data-i18n="lesson.p3" class="text-lg sm:text-xl text-gray-400 font-medium italic">
+                                Welcome, Muhammad. I am Khalid, I am from Saudi Arabia.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <h3 data-i18n="features.native">معلمين ناطقين بالعربية</h3>
-                    <p data-i18n="features.nativeDesc">تعلم من معلمين ناطقين بالعربية</p>
+            </section>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100">
+                    <h3 data-i18n="features.interactive" class="text-xl font-bold text-gray-900 mb-3">دروس تفاعلية</h3>
+                    <p data-i18n="features.interactiveDesc" class="text-gray-500">دروس تفاعلية مع تمارين</p>
                 </div>
-                <div class="feature-card">
-                    <h3 data-i18n="features.flexible">تعلم بمرونة</h3>
-                    <p data-i18n="features.flexibleDesc">تعلم بالسرعة التي تناسبك</p>
+                <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100">
+                    <h3 data-i18n="features.native" class="text-xl font-bold text-gray-900 mb-3">معلمين ناطقين بالعربية</h3>
+                    <p data-i18n="features.nativeDesc" class="text-gray-500">تعلم من معلمين ناطقين بالعربية</p>
                 </div>
-                <div class="feature-card">
-                    <h3 data-i18n="features.certificate">شهادات معتمدة</h3>
-                    <p data-i18n="features.certificateDesc">احصل على شهادات معتمدة</p>
+                <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100">
+                    <h3 data-i18n="features.flexible" class="text-xl font-bold text-gray-900 mb-3">تعلم بمرونة</h3>
+                    <p data-i18n="features.flexibleDesc" class="text-gray-500">تعلم بالسرعة التي تناسبك</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100">
+                    <h3 data-i18n="features.certificate" class="text-xl font-bold text-gray-900 mb-3">شهادات معتمدة</h3>
+                    <p data-i18n="features.certificateDesc" class="text-gray-500">احصل على شهادات معتمدة</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p data-i18n="footer.copyright">© 2026 منصة تعلم اللغة العربية. جميع الحقوق محفوظة.</p>
+    <footer class="bg-white border-t border-gray-100 py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p data-i18n="footer.copyright" class="text-gray-500">© 2026 منصة تعلم اللغة العربية. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 

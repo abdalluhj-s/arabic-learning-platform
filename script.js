@@ -10,10 +10,15 @@ const translations = {
         },
         hero: {
             title: 'تعلم اللغة العربية',
-            subtitle: 'منصة تعليمية متعددة اللغات لتعلم اللغة العربية لغير الناطقين بها',
-            welcome: 'مرحباً بك في منصة تعلم اللغة العربية',
-            description: 'نقدم لك أفضل الطرق لتعلم اللغة العربية بطريقة سهلة وممتعة',
-            getStarted: 'ابدأ التعلم'
+            subtitle: 'منصة تعليمية متعددة اللغات لتعلم اللغة العربية لغير الناطقين بها'
+        },
+        lesson: {
+            title: 'الدرس الأول: التحية والتعارف',
+            subtitle: 'محادثة بسيطة بين شخصين',
+            playAudio: 'استمع للدرس',
+            p1: 'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ.',
+            p2: 'اسْمِي مُحَمَّدٌ، أَنَا مِنَ مِصْرَ. مَا اسْمُكَ؟',
+            p3: 'أَهْلًا بِكَ يَا مُحَمَّدُ. أَنَا خَالِدٌ، أَنَا مِنَ السُّعُودِيَّةِ.'
         },
         features: {
             interactive: 'دروس تفاعلية',
@@ -40,10 +45,15 @@ const translations = {
         },
         hero: {
             title: 'Learn Arabic',
-            subtitle: 'A multilingual educational platform for learning Arabic for non-native speakers',
-            welcome: 'Welcome to the Arabic Learning Platform',
-            description: 'We offer you the best ways to learn Arabic in an easy and enjoyable manner',
-            getStarted: 'Start Learning'
+            subtitle: 'A multilingual educational platform for learning Arabic for non-native speakers'
+        },
+        lesson: {
+            title: 'Lesson 1: Greeting and Introduction',
+            subtitle: 'A simple conversation between two people',
+            playAudio: 'Listen to Lesson',
+            p1: 'Peace be upon you, and the mercy of Allah and His blessings.',
+            p2: 'My name is Muhammad, I am from Egypt. What is your name?',
+            p3: 'Welcome, Muhammad. I am Khalid, I am from Saudi Arabia.'
         },
         features: {
             interactive: 'Interactive Lessons',
@@ -70,14 +80,19 @@ const translations = {
         },
         hero: {
             title: 'Изучайте арабский язык',
-            subtitle: 'Многоязычная образовательная платформа для изучения арабского языка для не носителей',
-            welcome: 'Добро пожаловать на платформу изучения арабского языка',
-            description: 'Мы предлагаем вам лучшие способы изучения арабского языка простым и увлекательным способом',
-            getStarted: 'Начать обучение'
+            subtitle: 'Многоязычная образовательная платформа для изучения арабского языка для не носителей'
+        },
+        lesson: {
+            title: 'Урок 1: Приветствие и знакомство',
+            subtitle: 'Простой разговор بين شخصين',
+            playAudio: 'Слушать урок',
+            p1: 'Мир вам, милость Аллаха и Его благословение.',
+            p2: 'Меня зовут Мухаммад, я из Египта. Как тебя зовут?',
+            p3: 'Добро пожаловать, Мухаммад. Я Халид, я из Саудовской Аравии.'
         },
         features: {
             interactive: 'Интерактивные уроки',
-            interactiveDesc: 'Интерактивные уроки с упражнениями',
+            interactiveDesc: 'Интеرافктивные уроки с упражнениями',
             native: 'Носители арабского языка',
             nativeDesc: 'Учитесь у носителей арабского языка',
             flexible: 'Гибкое обучение',
@@ -100,10 +115,15 @@ const translations = {
         },
         hero: {
             title: 'Arab tilini o\'rganing',
-            subtitle: 'Arab tilini o\'rganish uchun ko\'p tilli ta\'lim platformasi',
-            welcome: 'Arab tili o\'rganish platformasiga xush kelibsiz',
-            description: 'Biz sizga arab tilini oson va qiziqarli usulda o\'rganish uchun eng yaxshi usullarni taklif etamiz',
-            getStarted: 'O\'rganishni boshlash'
+            subtitle: 'Arab tilini o\'rganish uchun ko\'p tilli ta\'lim platformasi'
+        },
+        lesson: {
+            title: '1-dars: Salomlashish va tanishish',
+            subtitle: 'Ikki kishi o\'rtasidagi oddiy suhbat',
+            playAudio: 'Darsni tinglang',
+            p1: 'Sizga tinchlik, Allohning rahmati va barakasi bo\'lsin.',
+            p2: 'Mening ismim Muhammad, men Misrdanman. Ismingiz nima?',
+            p3: 'Xush kelibsiz, Muhammad. Men Xolidman, men Saudiya Arabistonidanman.'
         },
         features: {
             interactive: 'Interaktiv darslar',
@@ -132,21 +152,27 @@ const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 
 // Language Dropdown Toggle
-langBtn.addEventListener('click', () => {
-    langDropdown.classList.toggle('hidden');
-});
+if (langBtn) {
+    langBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langDropdown.classList.toggle('hidden');
+    });
+}
 
 // Mobile Menu Toggle
-mobileMenuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-});
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileMenu.classList.toggle('hidden');
+    });
+}
 
 // Close dropdowns when clicking outside
 document.addEventListener('click', (e) => {
-    if (langBtn && !langBtn.contains(e.target) && langDropdown && !langDropdown.contains(e.target)) {
+    if (langDropdown && !langDropdown.contains(e.target)) {
         langDropdown.classList.add('hidden');
     }
-    if (mobileMenuBtn && !mobileMenuBtn.contains(e.target) && mobileMenu && !mobileMenu.contains(e.target)) {
+    if (mobileMenu && !mobileMenu.contains(e.target)) {
         mobileMenu.classList.add('hidden');
     }
 });
@@ -171,7 +197,7 @@ function setLanguage(lang) {
     html.setAttribute('dir', translations[lang].direction);
     
     // Update current language button
-    currentLangSpan.textContent = translations[lang].langName;
+    if (currentLangSpan) currentLangSpan.textContent = translations[lang].langName;
     
     // Update all translatable elements
     updateTranslations();
@@ -208,6 +234,11 @@ function updateTranslations() {
         });
         
         if (value) {
+            // For lesson paragraphs, we don't want to overwrite the Arabic text if it's the Arabic language
+            // but the current implementation of index.html has hardcoded Arabic and data-i18n for translations.
+            // So if currentLang is 'ar', we might want to hide the translation or show it in Arabic too.
+            // The user asked for "translation in the currently selected language directly underneath each Arabic paragraph".
+            // If the selected language is Arabic, showing the same text twice might be redundant, but let's follow the logic.
             element.textContent = value;
         }
     });
