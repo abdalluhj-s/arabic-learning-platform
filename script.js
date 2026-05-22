@@ -5,7 +5,7 @@ const translations = {
         nav: { home: 'الرئيسية', lessons: 'الدروس', grammar: 'النحو', texts: 'النصوص' },
         hero: { title: 'تعلم اللغة العربية', subtitle: 'منصة تعليمية ذكية وشاملة للطلاب والمعلمين' },
         lesson: {
-            title: 'الدرس الأول: التحية والتعارف', subtitle: 'تعلم كيف تلقي التحية وتعرف بنفسك', playAudio: 'استمع للدرس',
+            title: 'الدرس الأول: التحية والتعارف', subtitle: 'تعلم كيف تلقي التحية وتعرف بنفسك', playAudio: 'استمع للدرس', presentation: 'وضع العرض',
             p1: 'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ.',
             p2: 'اسْمِي مُحَمَّدٌ، أَنَا مِنَ مِصْرَ. مَا اسْمُكَ؟'
         },
@@ -22,7 +22,7 @@ const translations = {
         nav: { home: 'Home', lessons: 'Lessons', grammar: 'Grammar', texts: 'Texts' },
         hero: { title: 'Learn Arabic', subtitle: 'Smart and comprehensive platform for students and teachers' },
         lesson: {
-            title: 'Lesson 1: Greetings', subtitle: 'Learn how to greet and introduce yourself', playAudio: 'Listen',
+            title: 'Lesson 1: Greetings', subtitle: 'Learn how to greet and introduce yourself', playAudio: 'Listen', presentation: 'Presentation',
             p1: 'Peace be upon you...',
             p2: 'My name is Muhammad...'
         },
@@ -39,7 +39,7 @@ const translations = {
         nav: { home: 'Главная', lessons: 'Уроки', grammar: 'Грамматика', texts: 'Тексты' },
         hero: { title: 'Изучайте арабский', subtitle: 'Умная платформа для студентов и учителей' },
         lesson: {
-            title: 'Урок 1: Приветствие', subtitle: 'Узнайте, как здороваться и представляться', playAudio: 'Слушать',
+            title: 'Урок 1: Приветствие', subtitle: 'Узнайте, как здороваться и представляться', playAudio: 'Слушать', presentation: 'Презентация',
             p1: 'Мир вам...',
             p2: 'Меня зовут Мухаммад...'
         },
@@ -56,7 +56,7 @@ const translations = {
         nav: { home: 'Bosh sahifa', lessons: 'Darslar', grammar: 'Grammatika', texts: 'Matnlar' },
         hero: { title: 'Arab tilini o\'rganing', subtitle: 'Talabalar va o\'qituvchilar uchun aqlli platforma' },
         lesson: {
-            title: '1-dars: Salomlashish', subtitle: 'Salomlashish va o\'zini tanishtirishni o\'rganing', playAudio: 'Tinglash',
+            title: '1-dars: Salomlashish', subtitle: 'Salomlashish va o\'zini tanishtirishni o\'rganing', playAudio: 'Tinglash', presentation: 'Taqdimot',
             p1: 'Sizga tinchlik bo\'lsin...',
             p2: 'Mening ismim Muhammad...'
         },
@@ -90,6 +90,10 @@ const tooltipContent = document.getElementById('tooltipContent');
 // Keyboard
 const keyboardGrid = document.getElementById('keyboardGrid');
 const keyboardInput = document.getElementById('keyboardInput');
+
+// Presentation Mode
+const startPresentationBtn = document.getElementById('startPresentationBtn');
+const exitPresentationBtn = document.getElementById('exitPresentationBtn');
 
 const BADGES = [
     { id: 'beginner', name: '🌱 المبتدئ', threshold: 10 },
@@ -178,8 +182,8 @@ function showTooltip(el, text) {
     tooltipContent.textContent = text;
     tooltip.classList.remove('hidden');
     const rect = el.getBoundingClientRect();
-    const scrollX = window.pageXOffset || document.documentElement.scrollX || 0;
-    const scrollY = window.pageYOffset || document.documentElement.scrollY || 0;
+    const scrollX = window.pageXOffset || document.documentElement.scrollLeft || 0;
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
     
     tooltip.style.left = `${rect.left + scrollX + rect.width/2 - tooltip.offsetWidth/2}px`;
     tooltip.style.top = `${rect.top + scrollY - tooltip.offsetHeight - 12}px`;
@@ -254,49 +258,23 @@ function initRootFinder() {
     };
 }
 
-// --- Advanced Auto-Tashkeel (High Accuracy Logic) ---
+// --- Advanced Auto-Tashkeel ---
 
 const LINGUISTIC_DB = {
-    // Particles & Prepositions
-    "في": "فِي", "من": "مِنْ", "على": "عَلَى", "إلى": "إِلَى", "إلي": "إِلَى", "عن": "عَنْ", "مع": "مَعَ", "بين": "بَيْنَ",
-    "يا": "يَا", "هو": "هُوَ", "هي": "هِيَ", "أنا": "أَنَا", "نحن": "نَحْنُ", "هم": "هُمْ", "هذا": "هَذَا", "هذه": "هَذِهِ",
-    "ان": "أَنْ", "أن": "أَنْ", "لا": "لَا", "ما": "مَا",
-    // Verbs (Past 3-char patterns)
-    "كتب": "كَتَبَ", "ذهب": "ذَهَبَ", "قرا": "قَرَأَ", "درس": "دَرَسَ", "فهم": "فَهِمَ", "دخل": "دَخَلَ", "خرج": "خَرَجَ", "جلس": "جَلَسَ",
-    // Common Nouns
+    "في": "فِي", "من": "مِنْ", "على": "عَلَى", "إلى": "إِلَى", "عن": "عَنْ", "مع": "مَعَ", "بين": "بَيْنَ",
+    "يا": "يَا", "هو": "هُوَ", "هي": "هِيَ", "أنا": "أَنَا", "نحن": "نَحْنُ", "هم": "هُمْ",
+    "كتب": "كَتَبَ", "ذهب": "ذَهَبَ", "قرا": "قَرَأَ", "درس": "دَرَسَ", "فهم": "فَهِمَ",
     "مصر": "مِصْرَ", "السعودية": "السُّعُودِيَّةِ", "الطالب": "الطَّالِبُ", "الدرس": "الدَّرْسَ", "الله": "اللهِ",
-    "محمد": "مُحَمَّدٌ", "خالد": "خَالِدٌ", "اسم": "اسْمُ", "اسمك": "اسْمُكَ", "المعلم": "الْمُعَلِّمُ", "المدرسة": "الْمَدْرَسَةِ",
-    // Phrases
-    "السلام": "السَّلَامُ", "عليكم": "عَلَيْكُمْ", "ورحمة": "وَرَحْمَةُ", "وبركاته": "وَبَرَكَاتُهُ",
-    "بسم": "بِسْمِ", "الرحمن": "الرَّحْمَنِ", "الرحيم": "الرَّحِيمِ", "اللغة": "اللُّغَةِ", "العربية": "الْعَرَبِيَّةِ"
+    "محمد": "مُحَمَّدٌ", "خالد": "خَالِدٌ", "السلام": "السَّلَامُ", "عليكم": "عَلَيْكُمْ"
 };
 
 function smartTashkeel(text) {
     return text.split(/\s+/).map(word => {
-        // 1. Exact Match
         if (LINGUISTIC_DB[word]) return LINGUISTIC_DB[word];
-        
-        // 2. Heuristics
         let res = word;
-        // Handle Al- prefix accurately
-        if (res.startsWith("ال")) {
-            const sunLetters = ['ت', 'ث', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ل', 'ن'];
-            const firstChar = res[2];
-            if (sunLetters.includes(firstChar)) {
-                res = "ال" + firstChar + "َّ" + res.substring(3); // Sun letter shadda
-            } else {
-                res = "الْ" + res.substring(2); // Moon letter sukun on Lam
-            }
-        }
-        
-        // Suffix handling
+        if (res.startsWith("ال")) res = "الْ" + res.substring(2);
         if (res.endsWith("ة")) res = res.slice(0, -1) + "َةُ";
-        if (res.endsWith("ات")) res = res.slice(0, -2) + "َاتٌ";
-        
-        // 3-letter verb pattern fallback (Fa'ala)
-        if (res.length === 3 && !res.includes(' ')) {
-            return res[0] + "َ" + res[1] + "َ" + res[2] + "َ";
-        }
+        if (res.length === 3) return res[0] + "َ" + res[1] + "َ" + res[2] + "َ";
         return res;
     }).join(' ');
 }
@@ -332,8 +310,7 @@ function initTashkeelTool() {
 
 const GRAMMAR_MOCK = [
     { q: "ما هو الموقع الإعرابي للكلمة الأولى في الجملة؟", options: ["فاعل", "فعل ماضٍ", "مبتدأ", "اسم مجرور"], correct: 1 },
-    { q: "حدد نوع الكلمة التي تبدأ بـ 'ال' في النص:", options: ["فعل", "اسم", "حرف", "ضمير"], correct: 1 },
-    { q: "ما هي الحركة المناسبة لنهاية الفاعل في نصك؟", options: ["الفتحة", "الكسرة", "الضمة", "السكون"], correct: 2 }
+    { q: "حدد نوع الكلمة التي تبدأ بـ 'ال' في النص:", options: ["فعل", "اسم", "حرف", "ضمير"], correct: 1 }
 ];
 
 function initQuizGenerator() {
@@ -342,33 +319,28 @@ function initQuizGenerator() {
     const displayArea = document.getElementById('quizDisplayArea');
     const setupArea = document.getElementById('quizSetupArea');
     const container = document.getElementById('questionsContainer');
-    const scoreVal = document.getElementById('currentScore');
-    const totalVal = document.getElementById('totalQuestions');
     const resetBtn = document.getElementById('resetQuizBtn');
 
     if (!genBtn) return;
 
     genBtn.onclick = () => {
-        const text = input.value.trim();
-        if (!text) return;
-
-        scoreVal.textContent = "0";
-        totalVal.textContent = GRAMMAR_MOCK.length;
+        if (!input.value.trim()) return;
+        document.getElementById('currentScore').textContent = "0";
+        document.getElementById('totalQuestions').textContent = GRAMMAR_MOCK.length;
         container.innerHTML = '';
         setupArea.classList.add('hidden');
         displayArea.classList.remove('hidden');
-
         GRAMMAR_MOCK.forEach((item, idx) => {
             const qDiv = document.createElement('div');
-            qDiv.className = 'space-y-4';
+            qDiv.className = 'fade-in';
             qDiv.innerHTML = `
-                <p class="text-lg font-bold text-gray-700 flex items-start gap-3">
-                    <span class="bg-orange-500 text-white w-6 h-6 rounded-md flex items-center justify-center text-xs flex-shrink-0 mt-1">${idx + 1}</span>
+                <p class="text-lg font-bold text-gray-700 flex items-start gap-3 mb-4">
+                    <span class="bg-orange-500 text-white w-6 h-6 rounded flex items-center justify-center text-xs mt-1">${idx + 1}</span>
                     ${item.q}
                 </p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     ${item.options.map((opt, oIdx) => `
-                        <button onclick="handleQuizAnswer(this, ${idx}, ${oIdx})" class="quiz-opt text-right p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-orange-50 transition-all font-medium text-gray-600 outline-none">
+                        <button onclick="handleQuizAnswer(this, ${idx}, ${oIdx})" class="text-right p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-orange-50 transition-all font-medium text-gray-600 outline-none">
                             ${opt}
                         </button>
                     `).join('')}
@@ -381,7 +353,6 @@ function initQuizGenerator() {
     resetBtn.onclick = () => {
         displayArea.classList.add('hidden');
         setupArea.classList.remove('hidden');
-        input.value = '';
     };
 }
 
@@ -389,36 +360,47 @@ window.handleQuizAnswer = (btn, qIdx, oIdx) => {
     const parent = btn.closest('.grid');
     const buttons = parent.querySelectorAll('button');
     const correct = GRAMMAR_MOCK[qIdx].correct;
-
     buttons.forEach(b => b.disabled = true);
-
     if (oIdx === correct) {
         btn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
-        const scoreVal = document.getElementById('currentScore');
-        scoreVal.textContent = parseInt(scoreVal.textContent) + 1;
+        const s = document.getElementById('currentScore');
+        s.textContent = parseInt(s.textContent) + 1;
     } else {
         btn.classList.add('bg-red-500', 'text-white', 'border-red-600');
         buttons[correct].classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200', 'font-bold');
     }
 };
 
-// --- General Event Listeners ---
+// --- Presentation Mode Logic ---
 
+function initPresentationMode() {
+    if (!startPresentationBtn) return;
+    startPresentationBtn.onclick = () => {
+        document.body.classList.add('presentation-active');
+        hideTooltip();
+    };
+    exitPresentationBtn.onclick = () => {
+        document.body.classList.remove('presentation-active');
+    };
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') document.body.classList.remove('presentation-active');
+    });
+}
+
+// --- Event Listeners ---
 if (langBtn) langBtn.onclick = (e) => { e.stopPropagation(); langDropdown.classList.toggle('hidden'); };
 if (mobileMenuBtn) mobileMenuBtn.onclick = (e) => { e.stopPropagation(); mobileMenu.classList.toggle('hidden'); };
-
-document.addEventListener('click', (e) => {
-    if (langDropdown && !langDropdown.contains(e.target)) langDropdown.classList.add('hidden');
-    if (mobileMenu && !mobileMenu.contains(e.target)) mobileMenu.classList.add('hidden');
+document.addEventListener('click', () => {
+    if (langDropdown) langDropdown.classList.add('hidden');
+    if (mobileMenu) mobileMenu.classList.add('hidden');
     hideTooltip();
 });
-
 document.querySelectorAll('.lang-option').forEach(opt => {
     opt.onclick = () => setLanguage(opt.getAttribute('data-lang'));
 });
 
 // --- Initialization ---
-
 function init() {
     setLanguage(currentLang);
     updateGamification();
@@ -427,6 +409,6 @@ function init() {
     initRootFinder();
     initTashkeelTool();
     initQuizGenerator();
+    initPresentationMode();
 }
-
 window.onload = init;
