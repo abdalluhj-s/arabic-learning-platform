@@ -1,0 +1,22 @@
+const dictionaryData = {
+    "كتب": { pos: "فعل (Verb)", en: "wrote", ru: "писал", uz: "yozdi" },
+    "مدرسة": { pos: "اسم (Noun)", en: "school", ru: "школа", uz: "maktab" },
+    "طالب": { pos: "اسم (Noun)", en: "student", ru: "студент", uz: "talaba" },
+    "جميل": { pos: "صفة (Adj)", en: "beautiful", ru: "красивый", uz: "chiroyli" },
+    "بيت": { pos: "اسم (Noun)", en: "house", ru: "дом", uz: "uy" },
+    "شمس": { pos: "اسم (Noun)", en: "sun", ru: "солнце", uz: "quyosh" },
+    "قمر": { pos: "اسم (Noun)", en: "moon", ru: "луна", uz: "oy" },
+    "سماء": { pos: "اسم (Noun)", en: "sky", ru: "небо", uz: "osmon" },
+    "أرض": { pos: "اسم (Noun)", en: "earth", ru: "земля", uz: "er" },
+    "كتاب": { pos: "اسم (Noun)", en: "book", ru: "книга", uz: "kitob" },
+    "مُعلم": { pos: "اسم (Noun)", en: "teacher", ru: "учитель", uz: "o'qituvchi" },
+    "درس": { pos: "اسم (Noun)", en: "lesson", ru: "урок", uz: "dars" },
+    "قلم": { pos: "اسم (Noun)", en: "pen", ru: "ручка", uz: "qalam" },
+    "بحر": { pos: "اسم (Noun)", en: "sea", ru: "море", uz: "dengiz" },
+    "جبل": { pos: "اسم (Noun)", en: "mountain", ru: "гора", uz: "tog'" },
+    "مدينة": { pos: "اسم (Noun)", en: "city", ru: "город", uz: "shahar" },
+    "قرية": { pos: "اسم (Noun)", en: "village", ru: "деревня", uz: "qishloq" },
+    "سفر": { pos: "اسم (Noun)", en: "travel", ru: "путешествие", uz: "sayohat" },
+    "أكل": { pos: "فعل (Verb)", en: "ate", ru: "ел", uz: "edi" },
+    "شرب": { pos: "فعل (Verb)", en: "drank", ru: "пил", uz: "ichdi" }
+};
