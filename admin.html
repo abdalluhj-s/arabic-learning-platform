@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Platform - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col">
+        <div class="p-6 text-2xl font-bold text-blue-400 border-b border-slate-800">
+            Admin Panel
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <button onclick="showSection('levels')" class="w-full text-left p-3 rounded-lg hover:bg-slate-800 transition-colors">Levels</button>
+            <button onclick="showSection('lessons')" class="w-full text-left p-3 rounded-lg hover:bg-slate-800 transition-colors">Lessons</button>
+            <button onclick="showSection('quizzes')" class="w-full text-left p-3 rounded-lg hover:bg-slate-800 transition-colors">Quizzes</button>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <button id="logoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-10 overflow-y-auto">
+        <header class="flex justify-between items-center mb-10">
+            <h1 id="sectionTitle" class="text-3xl font-bold text-slate-800">Dashboard Overview</h1>
+            <button id="addBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg transition-all">
+                + Add New
+            </button>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <div id="contentArea" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- Table will be injected here -->
+            <div class="p-20 text-center text-gray-400">
+                Loading data...
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Form (Hidden by default) -->
+    <div id="modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto">
+            <h2 id="modalTitle" class="text-2xl font-bold mb-6">Add New Item</h2>
+            <form id="adminForm" class="space-y-4">
+                <!-- Fields will be injected here -->
+                <div id="formFields" class="space-y-4"></div>
+                
+                <div class="flex gap-4 pt-6 border-t">
+                    <button type="submit" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl">Save Changes</button>
+                    <button type="button" onclick="closeModal()" class="flex-1 bg-gray-100 text-gray-600 font-bold py-3 rounded-xl">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="supabase.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

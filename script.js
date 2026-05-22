@@ -67,14 +67,29 @@ let gameState = {
 
 // --- Core Initialization ---
 
-function setLanguage(lang) {
+async function fetchSupabaseData() {
+    const { data: lessons, error } = await _supabase.from('lessons').select('*').order('id', { ascending: true });
+    if (!error && lessons.length > 0) {
+        window.lessonsData = lessons.map(l => ({
+            id: l.id,
+            title: l.title_ar,
+            text_ar: l.text_ar,
+            text_en: l.text_en,
+            text_ru: l.text_ru,
+            text_uz: l.text_uz,
+            audio_url: l.audio_url
+        }));
+    }
+}
+
+async function setLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('language', lang);
     document.documentElement.setAttribute('lang', lang);
     document.documentElement.setAttribute('dir', (translations[lang] || translations['en']).direction);
     if (currentLangSpan) currentLangSpan.textContent = (translations[lang] || translations['en']).langName;
     updateTranslations();
-    loadLesson(currentLessonIdx);
+    if (window.lessonsData) loadLesson(currentLessonIdx);
 }
 
 function updateTranslations() {
@@ -90,12 +105,12 @@ function updateTranslations() {
 // --- Lesson Logic ---
 
 function loadLesson(idx) {
-    const lesson = lessonsData[idx];
+    if (!window.lessonsData) return;
+    const lesson = window.lessonsData[idx];
     if (!lesson) return;
     
     currentLessonIdx = idx;
     document.getElementById('lessonTitle').textContent = lesson.title;
-    document.getElementById('lessonSubtitle').textContent = lesson[`subtitle_${currentLang}`] || lesson.subtitle || "";
     document.getElementById('currentLessonNum').textContent = idx + 1;
     
     const content = document.getElementById('lessonContent');
@@ -110,9 +125,8 @@ function loadLesson(idx) {
         </div>
     `;
 
-    // Update Nav Buttons
     document.getElementById('prevLessonBtn').disabled = (idx === 0);
-    document.getElementById('nextLessonBtn').disabled = (idx === lessonsData.length - 1);
+    document.getElementById('nextLessonBtn').disabled = (idx === window.lessonsData.length - 1);
     
     initDictionary();
 }
@@ -225,13 +239,11 @@ function initPresentationMode() {
     exitPresentationBtn.onclick = () => document.body.classList.remove('presentation-active');
 }
 
-// --- Root Finder, Tashkeel, Quiz (Mocked for brevity) ---
-// (Already implemented in previous turns, keeping core init calls)
-
 // --- Initialization ---
 
-function init() {
-    setLanguage(currentLang);
+async function init() {
+    await fetchSupabaseData();
+    await setLanguage(currentLang);
     updateGamification();
     initKeyboard();
     initDictionarySearch();
