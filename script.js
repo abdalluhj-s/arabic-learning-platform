@@ -32,6 +32,14 @@ const translations = {
             backspace: 'حذف',
             space: 'مسافة'
         },
+        rootFinder: {
+            title: 'باحث الجذور العربية',
+            subtitle: 'استكشف أصل الكلمات واشتقاقاتها',
+            explore: 'استكشاف',
+            notFound: 'عذراً، هذه الكلمة غير موجودة في قاعدة بياناتنا.',
+            rootTitle: 'الجذر الثلاثي',
+            relatedTitle: 'كلمات ذات صلة:'
+        },
         footer: {
             copyright: '© 2026 منصة تعلم اللغة العربية. جميع الحقوق محفوظة.'
         }
@@ -55,6 +63,14 @@ const translations = {
             complete: 'I finished this lesson!'
         },
         keyboard: { title: 'Virtual Keyboard', subtitle: 'Practice typing', backspace: 'Backspace', space: 'Space' },
+        rootFinder: {
+            title: 'Arabic Root Finder',
+            subtitle: 'Explore word origins',
+            explore: 'Explore',
+            notFound: 'Sorry, this word is not in our database.',
+            rootTitle: 'Trilateral Root',
+            relatedTitle: 'Related Words:'
+        },
         footer: { copyright: '© 2026 Arabic Learning Platform.' }
     },
     ru: {
@@ -76,6 +92,14 @@ const translations = {
             complete: 'Я закончил этот урок!'
         },
         keyboard: { title: 'Клавиатура', subtitle: 'Практика набора', backspace: 'Удалить', space: 'Пробел' },
+        rootFinder: {
+            title: 'Поиск корней',
+            subtitle: 'Изучайте происхождение слов',
+            explore: 'Исследовать',
+            notFound: 'Извините, этого слова нет в нашей базе.',
+            rootTitle: 'Трёхбуквенный корень',
+            relatedTitle: 'Родственные слова:'
+        },
         footer: { copyright: '© 2026 Платформа изучения арабского.' }
     },
     uz: {
@@ -97,6 +121,14 @@ const translations = {
             complete: 'Darsni tugatdim!'
         },
         keyboard: { title: 'Klaviatura', subtitle: 'Yozish mashqi', backspace: 'O\'chirish', space: 'Bo\'shliq' },
+        rootFinder: {
+            title: 'Ildiz izlovchi',
+            subtitle: 'So\'zlar kelib chiqishini o\'rganing',
+            explore: 'Izlash',
+            notFound: 'Kechirasiz, bu so\'z bizning bazamizda yo\'q.',
+            rootTitle: 'Uch harfli ildiz',
+            relatedTitle: 'Bog\'liq so\'zlar:'
+        },
         footer: { copyright: '© 2026 Arab tili platformasi.' }
     }
 };
@@ -222,15 +254,56 @@ function initKeyboard() {
         const btn = document.createElement('button');
         btn.textContent = char;
         btn.className = 'arabic-text bg-white border border-gray-200 hover:border-blue-500 hover:text-blue-600 text-2xl p-3 rounded-xl shadow-sm transition-all active:scale-95';
-        btn.onclick = () => { keyboardInput.value += char; keyboardInput.focus(); };
+        btn.onclick = () => { if (keyboardInput) { keyboardInput.value += char; keyboardInput.focus(); } };
         keyboardGrid.appendChild(btn);
     });
-    document.getElementById('keySpace').onclick = () => { keyboardInput.value += ' '; keyboardInput.focus(); };
-    document.getElementById('keyBackspace').onclick = () => { keyboardInput.value = keyboardInput.value.slice(0, -1); keyboardInput.focus(); };
+    const ks = document.getElementById('keySpace');
+    if (ks) ks.onclick = () => { if (keyboardInput) { keyboardInput.value += ' '; keyboardInput.focus(); } };
+    const kb = document.getElementById('keyBackspace');
+    if (kb) kb.onclick = () => { if (keyboardInput) { keyboardInput.value = keyboardInput.value.slice(0, -1); keyboardInput.focus(); } };
+}
+
+// --- Root Finder ---
+const rootDb = {
+    'مدرسة': { root: 'درس', related: ['مُدَرِّس', 'دِرَاسَة', 'يَدْرُس', 'دَارِس', 'دَرْس'] },
+    'مكتوب': { root: 'كتب', related: ['كِتَاب', 'كَاتِب', 'مَكْتَبَة', 'يَكْتُب', 'كِتَابَة'] },
+    'استغفار': { root: 'غفر', related: ['غَفُور', 'غَفَّار', 'يَغْفِر', 'مَغْفِرَة', 'غُفْرَان'] },
+    'محمود': { root: 'حمد', related: ['حَامِد', 'حَمِيد', 'يَحْمَد', 'أَحْمَد', 'الْحَمْد'] },
+    'مفتاح': { root: 'فتح', related: ['يَفْتَح', 'فَاتِح', 'مَفْتُوح', 'فَتْحَة', 'انْفِتَاح'] }
+};
+
+function initRootFinder() {
+    const input = document.getElementById('rootSearchInput');
+    const btn = document.getElementById('exploreBtn');
+    const resultArea = document.getElementById('rootResultArea');
+    const alert = document.getElementById('notFoundAlert');
+    const rootBadge = document.getElementById('rootBadge');
+    const relatedContainer = document.getElementById('relatedWordsContainer');
+
+    if (!btn) return;
+
+    btn.onclick = () => {
+        const word = input.value.trim();
+        const data = rootDb[word];
+        if (data) {
+            alert.classList.add('hidden');
+            resultArea.classList.remove('hidden');
+            rootBadge.textContent = data.root;
+            relatedContainer.innerHTML = '';
+            data.related.forEach(w => {
+                const span = document.createElement('span');
+                span.className = 'arabic-text bg-white border border-gray-100 text-gray-700 px-4 py-2 rounded-xl text-lg font-medium shadow-sm hover:text-emerald-600 transition-all';
+                span.textContent = w;
+                relatedContainer.appendChild(span);
+            });
+        } else {
+            resultArea.classList.add('hidden');
+            alert.classList.remove('hidden');
+        }
+    };
 }
 
 // --- Event Listeners ---
-
 if (langBtn) langBtn.onclick = (e) => { e.stopPropagation(); langDropdown.classList.toggle('hidden'); };
 if (mobileMenuBtn) mobileMenuBtn.onclick = (e) => { e.stopPropagation(); mobileMenu.classList.toggle('hidden'); };
 document.addEventListener('click', () => {
@@ -248,5 +321,6 @@ function init() {
     updateGamification();
     initDictionary();
     initKeyboard();
+    initRootFinder();
 }
 init();

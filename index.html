@@ -158,23 +158,43 @@
             </div>
 
             <!-- Virtual Arabic Keyboard Section -->
+...
+                </div>
+            </section>
+
+            <!-- Root Finder Section -->
             <section class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden mb-20 border border-gray-100">
-                <div class="p-6 sm:p-10">
-                    <div class="text-center mb-8">
-                        <h2 data-i18n="keyboard.title" class="text-2xl font-bold text-gray-900 mb-2">لوحة المفاتيح العربية الافتراضية</h2>
-                        <p data-i18n="keyboard.subtitle" class="text-gray-500">تدرب على الكتابة باللغة العربية</p>
-                    </div>
-                    <div class="mb-8">
-                        <input type="text" id="keyboardInput" dir="rtl" class="arabic-text w-full p-6 text-4xl text-gray-800 border-2 border-blue-100 rounded-2xl focus:border-blue-500 focus:outline-none shadow-inner bg-gray-50" placeholder="اكتب هنا...">
-                    </div>
-                    <div class="grid grid-cols-7 sm:grid-cols-10 gap-2 sm:gap-3" dir="rtl" id="keyboardGrid"></div>
-                    <div class="mt-4 flex gap-3" dir="rtl">
-                        <button id="keyBackspace" class="flex-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold py-4 rounded-xl flex items-center justify-center gap-2">
-                            <span data-i18n="keyboard.backspace">حذف</span>
+                <div class="bg-gradient-to-r from-emerald-600 to-teal-500 p-8 text-center">
+                    <h2 data-i18n="rootFinder.title" class="text-white text-3xl font-extrabold mb-2">باحث الجذور العربية</h2>
+                    <p data-i18n="rootFinder.subtitle" class="text-emerald-50 text-sm opacity-90">استكشف أصل الكلمات واشتقاقاتها</p>
+                </div>
+
+                <div class="p-8">
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                        <input type="text" id="rootSearchInput" dir="rtl"
+                            class="arabic-text flex-1 p-4 text-2xl border-2 border-emerald-50 rounded-2xl focus:border-emerald-500 focus:outline-none transition-all"
+                            placeholder="أدخل كلمة (مثلاً: مدرسة، مكتوب)...">
+                        <button id="exploreBtn" 
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-4 rounded-2xl transition-all active:scale-95 shadow-lg">
+                            <span data-i18n="rootFinder.explore">استكشاف</span>
                         </button>
-                        <button id="keySpace" class="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl">
-                            <span data-i18n="keyboard.space">مسافة</span>
-                        </button>
+                    </div>
+
+                    <div id="notFoundAlert" class="hidden bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl text-center mb-6 font-bold">
+                        <span data-i18n="rootFinder.notFound">عذراً، هذه الكلمة غير موجودة.</span>
+                    </div>
+
+                    <div id="rootResultArea" class="hidden space-y-8 animate-fade-in">
+                        <div class="bg-emerald-50 p-6 rounded-3xl text-center border border-emerald-100">
+                            <span data-i18n="rootFinder.rootTitle" class="text-gray-500 text-sm font-bold block mb-2">الجذر الثلاثي</span>
+                            <div id="rootBadge" class="arabic-text inline-block text-6xl font-black text-emerald-700 bg-white px-8 py-2 rounded-2xl shadow-sm border border-emerald-100">
+                                كتب
+                            </div>
+                        </div>
+                        <div>
+                            <span data-i18n="rootFinder.relatedTitle" class="text-gray-400 text-xs font-bold block mb-4 px-2 uppercase">كلمات ذات صلة:</span>
+                            <div id="relatedWordsContainer" class="flex flex-wrap gap-3"></div>
+                        </div>
                     </div>
                 </div>
             </section>
