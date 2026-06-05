@@ -18,5 +18,11 @@ const dictionaryData = {
     "قرية": { pos: "اسم (Noun)", en: "village", ru: "деревня", uz: "qishloq" },
     "سفر": { pos: "اسم (Noun)", en: "travel", ru: "путешествие", uz: "sayohat" },
     "أكل": { pos: "فعل (Verb)", en: "ate", ru: "ел", uz: "edi" },
-    "شرب": { pos: "فعل (Verb)", en: "drank", ru: "пил", uz: "ichdi" }
+    "شرب": { pos: "فعل (Verb)", en: "drank", ru: "пил", uz: "ichdi" },
+    "معجزة": { pos: "اسم (Noun)", en: "miracle", ru: "чудо", uz: "mo'jiza" },
+    "الخالدة": { pos: "صفة (Adj)", en: "eternal", ru: "вечный", uz: "boqiy" },
+    "منجما": { pos: "حال (Adverb)", en: "gradually", ru: "постепенно", uz: "bo'lib-bo'lib" },
+    "تثبيت": { pos: "مصدر (Noun)", en: "strengthening", ru: "укрепление", uz: "mustahkamlash" },
+    "فؤاد": { pos: "اسم (Noun)", en: "heart", ru: "сердце", uz: "qalb" },
+    "انشقاق": { pos: "مصدر (Noun)", en: "splitting", ru: "раскалывание", uz: "bo'linish" }
 };

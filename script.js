@@ -67,33 +67,51 @@ let gameState = {
 
 // --- Core Initialization ---
 
+function initPdfViewer() {
+    const togglePdfBtn = document.getElementById('togglePdfBtn');
+    const closePdfBtn = document.getElementById('closePdfBtn');
+    const pdfSection = document.getElementById('pdfSection');
+
+    if (togglePdfBtn && pdfSection) {
+        togglePdfBtn.onclick = () => {
+            pdfSection.classList.toggle('hidden');
+            if (!pdfSection.classList.contains('hidden')) {
+                pdfSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+    }
+
+    if (closePdfBtn && pdfSection) {
+        closePdfBtn.onclick = () => {
+            pdfSection.classList.add('hidden');
+        };
+    }
+}
+
 async function fetchSupabaseData() {
-    const { data: lessons, error } = await _supabase.from('lessons').select('*').order('id', { ascending: true });
-    if (!error && lessons.length > 0) {
-        window.lessonsData = lessons.map(l => ({
-            id: l.id,
-            title: l.title_ar,
-            text_ar: l.text_ar,
-            text_en: l.text_en,
-            text_ru: l.text_ru,
-            text_uz: l.text_uz,
-            audio_url: l.audio_url,
-            quiz: [] // Placeholder for now, fetched per lesson if needed
-        }));
-        
-        // Fetch quizzes for all lessons (optional: fetch per lesson to be efficient)
-        const { data: quizzes, error: qError } = await _supabase.from('quizzes').select('*');
-        const { data: options, error: oError } = await _supabase.from('quiz_options').select('*').order('option_index', { ascending: true });
-        
-        if (!qError && !oError) {
-            window.lessonsData.forEach(lesson => {
-                lesson.quiz = quizzes.filter(q => q.lesson_id === lesson.id).map(q => ({
-                    q: q.question_ar,
-                    correct: q.correct_option_index,
-                    options: options.filter(o => o.quiz_id === q.id).map(o => o.option_text)
-                }));
-            });
+    // Priority: use local lessonsData if Supabase fails or is empty
+    if (typeof lessonsData !== 'undefined' && lessonsData.length > 0) {
+        window.lessonsData = lessonsData;
+    }
+
+    // Attempt to fetch from Supabase if configured
+    try {
+        const { data: lessons, error } = await _supabase.from('lessons').select('*').order('id', { ascending: true });
+        if (!error && lessons && lessons.length > 0) {
+            window.lessonsData = lessons.map(l => ({
+                id: l.id,
+                title: l.title_ar,
+                subtitle: l.subtitle_ar || '',
+                text_ar: l.text_ar,
+                text_en: l.text_en,
+                text_ru: l.text_ru,
+                text_uz: l.text_uz,
+                audio_url: l.audio_url,
+                quiz: []
+            }));
         }
+    } catch (e) {
+        console.log("Supabase fetch skipped or failed, using local data.");
     }
 }
 
@@ -101,7 +119,8 @@ async function setLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('language', lang);
     document.documentElement.setAttribute('lang', lang);
-    document.documentElement.setAttribute('dir', (translations[lang] || translations['en']).direction);
+    const dir = (translations[lang] || translations['en']).direction;
+    document.documentElement.setAttribute('dir', dir);
     if (currentLangSpan) currentLangSpan.textContent = (translations[lang] || translations['en']).langName;
     updateTranslations();
     if (window.lessonsData) loadLesson(currentLessonIdx);
@@ -120,13 +139,20 @@ function updateTranslations() {
 // --- Lesson Logic ---
 
 function loadLesson(idx) {
-    if (!window.lessonsData) return;
+    if (!window.lessonsData || window.lessonsData.length === 0) return;
     const lesson = window.lessonsData[idx];
     if (!lesson) return;
     
     currentLessonIdx = idx;
     document.getElementById('lessonTitle').textContent = lesson.title;
+    document.getElementById('lessonSubtitle').textContent = lesson.subtitle || (translations[currentLang] || translations['en']).lesson.subtitle;
     document.getElementById('currentLessonNum').textContent = idx + 1;
+    
+    // Update total count if needed
+    const totalCountEl = document.querySelector('.lesson-nav-controls .text-gray-400');
+    if (totalCountEl) {
+        totalCountEl.innerHTML = `<span id="currentLessonNum">${idx + 1}</span> / ${window.lessonsData.length}`;
+    }
     
     const content = document.getElementById('lessonContent');
     content.innerHTML = `
@@ -350,6 +376,7 @@ async function init() {
     initDictionarySearch();
     initPresentationMode();
     initQuizGenerator();
+    initPdfViewer();
     
     document.getElementById('prevLessonBtn').onclick = () => loadLesson(currentLessonIdx - 1);
     document.getElementById('nextLessonBtn').onclick = () => loadLesson(currentLessonIdx + 1);

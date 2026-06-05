@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Lesson | Clear & Minimal</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cairo for UI, Amiri for Arabic Text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Tailwind Configuration & Custom CSS -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FAF9F6', // Soft warm cream background
+                        accent: '#059669', // Gentle Emerald Green
+                        accentLight: '#D1FAE5',
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #FAF9F6; /* cream */
+        }
+        /* Utra-clear Arabic Typography */
+        .arabic-block {
+            font-family: 'Amiri', serif;
+            line-height: 2.8 !important; /* Massive line height for Tashkeel */
+        }
+        /* Smooth fade in for dynamic content */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Sticky Control Header -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200 shadow-sm transition-all">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            
+            <!-- Left: Back Button -->
+            <button onclick="window.history.back()" class="group flex items-center justify-center w-12 h-12 rounded-full hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-800 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </button>
+
+            <!-- Center: Lesson Title -->
+            <h1 id="headerLessonTitle" class="text-xl sm:text-2xl font-bold text-slate-800 truncate px-4">
+                Loading Lesson...
+            </h1>
+
+            <!-- Right: Controls (Audio & Language) -->
+            <div class="flex items-center gap-3">
+                <!-- Audio Player Button -->
+                <button id="audioBtn" class="flex items-center gap-2 px-4 py-2 rounded-full bg-accentLight text-accent hover:bg-accent hover:text-white transition-all font-semibold focus:outline-none shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="hidden sm:inline">Listen</span>
+                </button>
+
+                <!-- Language Switcher -->
+                <div class="relative">
+                    <select id="langSelect" class="appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-4 pr-10 rounded-full focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent font-medium cursor-pointer shadow-sm">
+                        <option value="en">English</option>
+                        <option value="ru">Русский</option>
+                        <option value="uz">O'zbek</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+        
+        <!-- Loading State -->
+        <div id="loadingState" class="flex flex-col items-center justify-center py-20 text-slate-400">
+            <svg class="animate-spin h-10 w-10 text-accent mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="font-medium text-lg">Preparing your lesson...</p>
+        </div>
+
+        <!-- Dynamic Lesson Blocks Container -->
+        <div id="lessonContainer" class="hidden space-y-12">
+            <!-- Blocks injected via JS -->
+        </div>
+
+    </main>
+
+    <!-- Application Logic -->
+    <script>
+        /**
+         * Initialize Supabase Client
+         * Replace 'YOUR_SUPABASE_URL' and 'YOUR_ANON_KEY' with actual credentials.
+         */
+        const SUPABASE_URL = 'https://your-project.supabase.co';
+        const SUPABASE_KEY = 'your-anon-key';
+        
+        // We initialize gracefully to not break if Supabase is missing config
+        let supabase = null;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch(e) {
+            console.warn("Supabase not fully configured yet.");
+        }
+
+        // State Management
+        let currentLesson = null;
+        let selectedLang = localStorage.getItem('lessonLang') || 'en';
+
+        // DOM Elements
+        const DOM = {
+            title: document.getElementById('headerLessonTitle'),
+            container: document.getElementById('lessonContainer'),
+            loader: document.getElementById('loadingState'),
+            langSelect: document.getElementById('langSelect'),
+            audioBtn: document.getElementById('audioBtn')
+        };
+
+        // Event Listeners
+        DOM.langSelect.value = selectedLang;
+        DOM.langSelect.addEventListener('change', (e) => {
+            selectedLang = e.target.value;
+            localStorage.setItem('lessonLang', selectedLang);
+            if (currentLesson) renderLessonBlocks(currentLesson);
+        });
+
+        /**
+         * Fetch lesson data from Supabase
+         * Assumes a table 'lesson_blocks' structured with one sentence per row
+         * to support the ultra-clean layout constraint.
+         */
+        async function fetchLessonData(lessonId = 1) {
+            try {
+                if(!supabase) throw new Error("No supabase client");
+                
+                // 1. Fetch Lesson Metadata
+                const { data: lessonMeta, error: metaError } = await supabase
+                    .from('lessons')
+                    .select('title_ar')
+                    .eq('id', lessonId)
+                    .single();
+
+                if (metaError) throw metaError;
+
+                // 2. Fetch Structured Sentence Blocks for this lesson
+                const { data: blocks, error: blocksError } = await supabase
+                    .from('lesson_blocks')
+                    .select('*')
+                    .eq('lesson_id', lessonId)
+                    .order('order_index', { ascending: true });
+
+                if (blocksError) throw blocksError;
+
+                currentLesson = {
+                    title: lessonMeta.title_ar,
+                    blocks: blocks
+                };
+
+                if (!blocks || blocks.length === 0) {
+                    currentLesson = getMockData();
+                }
+
+                updateUI();
+
+            } catch (error) {
+                console.error("Supabase fetch failed, falling back to mock data.", error);
+                currentLesson = getMockData();
+                updateUI();
+            }
+        }
+
+        /**
+         * Render the clean UI
+         */
+        function updateUI() {
+            DOM.loader.classList.add('hidden');
+            DOM.title.textContent = currentLesson.title;
+            renderLessonBlocks(currentLesson);
+            DOM.container.classList.remove('hidden');
+        }
+
+        /**
+         * Generates the HTML for each Block Row
+         */
+        function renderLessonBlocks(lesson) {
+            DOM.container.innerHTML = '';
+
+            lesson.blocks.forEach((block, index) => {
+                const blockEl = document.createElement('article');
+                // Massive padding, clean white card, soft shadow
+                blockEl.className = 'bg-white rounded-[2rem] p-8 md:p-12 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-slate-100 fade-in';
+                blockEl.style.animationDelay = `${index * 100}ms`;
+
+                // Select translation based on current language
+                const translationText = block[\`text_\${selectedLang}\`] || block.text_en;
+
+                blockEl.innerHTML = \`
+                    <div class="flex flex-col gap-8">
+                        <!-- Arabic Text: Huge, Massive Line Height, Right Aligned -->
+                        <div class="arabic-block text-4xl md:text-5xl text-slate-800 text-right w-full" dir="rtl">
+                            \${block.text_ar}
+                        </div>
+                        
+                        <!-- Divider Line -->
+                        <div class="w-16 h-1 bg-accentLight rounded-full"></div>
+
+                        <!-- Translation: Smaller, Muted, Left Aligned -->
+                        <div class="text-lg md:text-xl text-slate-500 text-left leading-relaxed" dir="ltr">
+                            \${translationText}
+                        </div>
+                    </div>
+                \`;
+                
+                DOM.container.appendChild(blockEl);
+            });
+        }
+
+        /**
+         * Audio Player Mock Functionality
+         */
+        DOM.audioBtn.addEventListener('click', function() {
+            const isPlaying = this.classList.contains('bg-accent');
+            if (isPlaying) {
+                this.classList.remove('bg-accent', 'text-white');
+                this.classList.add('bg-accentLight', 'text-accent');
+                this.innerHTML = \`
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>
+                    <span class="hidden sm:inline">Listen</span>
+                \`;
+            } else {
+                this.classList.remove('bg-accentLight', 'text-accent');
+                this.classList.add('bg-accent', 'text-white');
+                this.innerHTML = \`
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                    <span class="hidden sm:inline">Playing...</span>
+                \`;
+            }
+        });
+
+        /**
+         * Mock Data Fallback structurally matching the ideal Supabase response
+         */
+        function getMockData() {
+            return {
+                title: "الْمُعْجِزَةُ الْخَالِدَةُ",
+                blocks: [
+                    {
+                        text_ar: "الْقُرْآنُ مُعْجِزَةُ الرَّسُولِ ﷺ، أَنْزَلَهُ اللَّهُ سُبْحَانَهُ وَتَعَالَى عَلَيْهِ مُنَجَّمًا حَسَبَ الْحَوَادِثِ.",
+                        text_en: "The Quran is the miracle of the Prophet (PBUH). Allah revealed it to him gradually according to events.",
+                        text_ru: "Коран — это чудо Пророка (мир ему). Аллах ниспослал его ему постепенно, сообразно событиям.",
+                        text_uz: "Qur'on Payg'ambarimiz (s.a.v.) ning mo'jizasidir. Alloh uni voqealarga ko'ra bo'lib-bo'lib nozil qilgan."
+                    },
+                    {
+                        text_ar: "وَالْحِكْمَةُ مِنْ ذَلِكَ تَثْبِيتُ قَلْبِ الرَّسُولِ ﷺ وَقُلُوبِ الْمُسْلِمِينَ، وَلِيَكُونَ حِفْظُهُ سَهْلًا عَلَيْهِمْ.",
+                        text_en: "The wisdom behind this was to strengthen the heart of the Prophet and the hearts of Muslims, and to make its memorization easy for them.",
+                        text_ru: "Мудрость этого заключалась в том, чтобы укрепить сердце Пророка и сердца мусульман, а также облегчить им его заучивание.",
+                        text_uz: "Buning hikmati Payg'ambarimizning va musulmonlarning qalbini mustahkamlash hamda uni yodlashni osonlashtirish edi."
+                    },
+                    {
+                        text_ar: "أَمَّا مُعْجِزَةُ الرَّسُولِ ﷺ الْخَالِدَةُ فَهِيَ الْقُرْآنُ الْكَرِيمُ، وَهِيَ بَاقِيَةٌ إِلَى يَوْمِ الْقِيَامَةِ.",
+                        text_en: "As for the eternal miracle of the Prophet (PBUH), it is the Holy Quran, and it remains until the Day of Resurrection.",
+                        text_ru: "Что касается вечного чуда Пророка (мир ему), то это Священный Коран, и он пребудет до Дня Воскресения.",
+                        text_uz: "Payg'ambarimiz (s.a.v.) ning boqiy mo'jizasi esa Qur'oni Karimdir va u Qiyomat kunigacha qoladi."
+                    }
+                ]
+            };
+        }
+
+        // Boot
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchLessonData(1); // Fetch Lesson ID 1
+        });
+    </script>
+</body>
+</html>
