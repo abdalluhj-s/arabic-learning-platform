@@ -65,6 +65,14 @@ def startup_event():
 def read_root():
     return {"message": "Welcome to the Arabic EdTech Platform API"}
 
+@app.get("/api/lessons", response_model=List[schemas.LessonBase])
+def get_all_lessons(db: Session = Depends(get_db)):
+    """
+    Get a list of all available lessons for the dashboard.
+    """
+    lessons = db.query(models.Lesson).order_by(models.Lesson.order).all()
+    return lessons
+
 @app.get("/api/lessons/{lesson_id}", response_model=schemas.LessonResponse)
 def get_lesson_detail(lesson_id: int, db: Session = Depends(get_db)):
     lesson = db.query(models.Lesson).filter(models.Lesson.id == lesson_id).first()
