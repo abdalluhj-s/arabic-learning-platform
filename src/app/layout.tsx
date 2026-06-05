@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Cairo, Amiri } from "next/font/google";
 import "./globals.css";
 
-// Configure Cairo font for UI (Supports Arabic, Latin, Cyrillic)
+// Configure Cairo font for UI (Supports Arabic, Latin)
 const cairo = Cairo({ 
-  subsets: ["arabic", "latin", "cyrillic"],
+  subsets: ["arabic", "latin"],
   variable: "--font-cairo",
   weight: ["400", "600", "700"],
   display: "swap",
