@@ -2,12 +2,12 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface UserState {
-  language: 'ru' | 'en';
+  language: 'ar' | 'ru' | 'en';
   level: number;
   points: number;
   completedLessons: number[];
   
-  setLanguage: (lang: 'ru' | 'en') => void;
+  setLanguage: (lang: 'ar' | 'ru' | 'en') => void;
   addPoints: (amount: number) => void;
   markLessonComplete: (lessonId: number) => void;
 }
@@ -15,7 +15,7 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      language: 'ru', 
+      language: 'ar', // Default to Arabic
       level: 1,
       points: 0,
       completedLessons: [],

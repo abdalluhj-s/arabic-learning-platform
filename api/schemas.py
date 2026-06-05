@@ -43,10 +43,13 @@ class LessonTextResponse(LessonTextBase):
 # Lesson Schemas
 # ==========================================
 class LessonBase(BaseModel):
+    id: int
     order: int
     title_ar: str
     title_ru: str
     title_en: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 class LessonResponse(LessonBase):
     id: int
