@@ -8,6 +8,7 @@ interface Vocabulary {
   id: number;
   arabic_word: string;
   pronunciation_cyrillic: string;
+  pronunciation_latin: string;
   translation_ru: string;
   translation_en: string;
   has_difficult_sound: boolean;
