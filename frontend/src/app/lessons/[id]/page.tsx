@@ -41,8 +41,8 @@ export default function LessonPage({ params }: { params: Promise<{ id: string }>
   useEffect(() => {
     const fetchLesson = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-        const res = await fetch(`${apiUrl}/api/lessons/${unwrappedParams.id}`);
+        // Vercel routes /api requests automatically to the Python backend
+        const res = await fetch(`/api/lessons/${unwrappedParams.id}`);
         const data = await res.json();
         setLesson(data);
       } catch (error) {
